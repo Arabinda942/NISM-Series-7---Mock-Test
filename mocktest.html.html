@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>NISM Series 7 - 4 Mock Tests</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    margin:0;
+    padding:0;
+}
+.header{
+    background:#2e86de;
+    color:white;
+    padding:15px;
+    text-align:center;
+    font-size:22px;
+}
+.container{
+    padding:20px;
+}
+.set-buttons button{
+    padding:15px 30px;
+    margin:10px;
+    font-size:18px;
+    cursor:pointer;
+    background:#27ae60;
+    color:white;
+    border:none;
+    border-radius:6px;
+}
+.set-buttons button:hover{
+    background:#1e8449;
+}
+.timer{
+    font-size:20px;
+    font-weight:bold;
+    color:red;
+    text-align:right;
+}
+.question{
+    margin-bottom:15px;
+    padding:10px;
+    background:white;
+    border-radius:6px;
+}
+.options label{
+    display:block;
+    margin-left:15px;
+}
+button.submit-btn{
+    padding:10px 25px;
+    background:#2e86de;
+    color:white;
+    border:none;
+    border-radius:5px;
+    font-size:16px;
+    cursor:pointer;
+}
+#result{
+    font-size:20px;
+    font-weight:bold;
+    margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+NISM Series 7 – 4 Full Mock Tests (60 Minutes Each)
+</div>
+
+<div class="container" id="home">
+<div class="set-buttons">
+<button onclick="startTest(1)">Set 1</button>
+<button onclick="startTest(2)">Set 2</button>
+<button onclick="startTest(3)">Set 3</button>
+<button onclick="startTest(4)">Set 4</button>
+</div>
+</div>
+
+<div class="container" id="exam" style="display:none;">
+<div class="timer" id="timer"></div>
+<form id="testForm"></form>
+<button class="submit-btn" onclick="submitTest()">Submit Test</button>
+<div id="result"></div>
+</div>
+
+<script>
+
+let timerInterval;
+let timeLeft = 60*60; // 60 minutes
+let currentSet = 1;
+
+function startTest(set){
+    currentSet = set;
+    document.getElementById("home").style.display="none";
+    document.getElementById("exam").style.display="block";
+    loadQuestions(set);
+    startTimer();
+}
+
+function startTimer(){
+    timeLeft = 60*60;
+    timerInterval = setInterval(function(){
+        let m = Math.floor(timeLeft/60);
+        let s = timeLeft%60;
+        document.getElementById("timer").innerHTML =
+        "Time Left: "+m+":"+(s<10?"0":"")+s;
+        timeLeft--;
+        if(timeLeft<0){
+            clearInterval(timerInterval);
+            alert("Time Over! Submitting...");
+            submitTest();
+        }
+    },1000);
+}
+
+function submitTest(){
+    clearInterval(timerInterval);
+    let score = 0;
+    let total = answers[currentSet].length;
+
+    for(let i=0;i<total;i++){
+        let q = document.querySelector('input[name="q'+i+'"]:checked');
+        if(q && q.value === answers[currentSet][i]){
+            score++;
+        }
+    }
+
+    document.getElementById("result").innerHTML =
+    "Your Score: "+score+" / "+total;
+}
+
+function loadQuestions(set){
+    let form = document.getElementById("testForm");
+    form.innerHTML="";
+    let qs = questionBank[set];
+
+    for(let i=0;i<qs.length;i++){
+        let qDiv = document.createElement("div");
+        qDiv.className="question";
+        qDiv.innerHTML="<p>"+(i+1)+". "+qs[i].question+"</p>";
+
+        qs[i].options.forEach((opt,index)=>{
+            let letter = ["A","B","C","D"][index];
+            qDiv.innerHTML +=
+            `<label><input type="radio" name="q${i}" value="${letter}"> ${letter}. ${opt}</label>`;
+        });
+
+        form.appendChild(qDiv);
+    }
+}
+
+/* ========================= */
+/* QUESTION BANK */
+/* ========================= */
+
+const questionBank = {
+
+/* SET 1 (Q1–50) */
+1: [
+{question:"Which regulator oversees securities markets in India?",
+options:["RBI","SEBI","IRDAI","PFRDA"]},
+{question:"Which segment involves trading of shares?",
+options:["Currency Market","Commodity Market","Equity Market","Money Market"]},
+{question:"Clearing and settlement of trades in NSE is done by:",
+options:["SEBI","NSE","Clearing Corporation","RBI"]},
+{question:"Settlement cycle in Indian equity market is:",
+options:["T+1","T+2","T+3","T+0"]},
+{question:"NSDL and CDSL are:",
+options:["Stock Exchanges","Banks","Depositories","Clearing Members"]},
+{question:"Demat account is opened with:",
+options:["SEBI","Depository","Depository Participant","Exchange"]},
+{question:"PAN is mandatory for:",
+options:["Trading account","Demat account","KYC","All of the above"]},
+{question:"Margin collected to cover potential loss due to price movement:",
+options:["Exposure margin","Initial margin","VaR margin","Mark to market"]},
+{question:"Mark to Market margin is collected:",
+options:["Weekly","Monthly","Daily","Quarterly"]},
+{question:"Auction market is used when:",
+options:["Price increases","Short delivery occurs","IPO launches","Dividend declared"]},
+{question:"T stands for:",
+options:["Trade date","Transaction date","Transfer date","Trading week"]},
+{question:"Corporate action example:",
+options:["Bonus issue","Futures contract","Intraday trade","Margin call"]},
+{question:"Risk of counterparty default handled by:",
+options:["Broker","Investor","Clearing Corporation","Bank"]},
+{question:"Primary market deals with:",
+options:["Old securities","Derivatives","New issue of securities","Commodities"]},
+{question:"Secondary market is for:",
+options:["IPO subscription","Trading existing securities","Loan disbursement","Insurance"]},
+{question:"Contract note must be issued within:",
+options:["12 hours","24 hours","48 hours","7 days"]},
+{question:"Client code modification permitted:",
+options:["Anytime","With valid reason","After settlement","Not allowed"]},
+{question:"Rolling settlement means:",
+options:["Weekly","Monthly","T+1 basis continuously","After 15 days"]},
+{question:"STP stands for:",
+options:["Straight Through Processing","Systematic Trade Protection","Transfer Protocol","Standard Policy"]},
+{question:"ISIN identifies:",
+options:["Investor","Broker","Exchange","Security"]},
+{question:"Pledge of securities used for:",
+options:["Selling","Collateral","Ownership transfer","Closing account"]},
+{question:"Off-market transfer means:",
+options:["Through NSE","Through BSE","Not through exchange","Futures trade"]},
+{question:"Pay-in day refers to:",
+options:["Delivery to clearing corporation","Dividend day","IPO allotment","Record date"]},
+{question:"Pay-out day refers to:",
+options:["Margin day","Receipt of funds/securities","Auction day","Trade day"]},
+{question:"Circuit filter imposed to:",
+options:["Increase liquidity","Stop trading","Prevent volatility","Fix price"]},
+{question:"Insider trading is:",
+options:["Ethical","Legal","Allowed","Illegal"]},
+{question:"KYC norms prescribed by:",
+options:["RBI","SEBI","IRDAI","Finance Ministry"]},
+{question:"RMS stands for:",
+options:["Risk Management System","Reserve Margin System","Regulatory Service","Rolling Setup"]},
+{question:"Exposure margin protects against:",
+options:["Broker default","System error","Adverse movement","Insider trading"]},
+{question:"Short selling allowed in:",
+options:["Equity segment","IPO","Primary only","Mutual funds"]},
+{question:"Free balance in demat means:",
+options:["Locked","Pledged","Frozen","Unencumbered"]},
+{question:"Settlement Guarantee Fund maintained by:",
+options:["SEBI","RBI","Clearing Corporation","Broker Association"]},
+{question:"IPO allotment approved by:",
+options:["Registrar","Stock Exchange","SEBI Chairman","Lead Manager"]},
+{question:"Record date used for:",
+options:["Price","Brokerage","Eligible shareholders","Margin"]},
+{question:"Ex-date means:",
+options:["Eligible date","Dividend date","Buyer not entitled","Auction date"]},
+{question:"Reduction in face value called:",
+options:["Bonus","Rights","Buyback","Stock split"]},
+{question:"Buyback results in:",
+options:["Increase capital","Reduction capital","Increase public share","Bonus"]},
+{question:"Margin call occurs when:",
+options:["Margin insufficient","Profit increases","Dividend declared","Trade cancelled"]},
+{question:"DIS used for:",
+options:["IPO","Margin reporting","Transfer securities","KYC"]},
+{question:"UCC stands for:",
+options:["Universal Code","Unified Certificate","Unique Clearing Client","Unique Client Code"]},
+{question:"Operational risk refers to:",
+options:["Market movement","System failure","Interest change","Inflation"]},
+{question:"Credit risk arises due to:",
+options:["Tech failure","Price fluctuation","Counterparty default","Regulation change"]},
+{question:"Market risk due to:",
+options:["Price fluctuation","Negligence","Fraud","Audit"]},
+{question:"SEBI Act enacted in:",
+options:["1988","1990","1995","1992"]},
+{question:"AML stands for:",
+options:["Asset Limit","Anti Money Laundering","Market Liquidity","Margin Levy"]},
+{question:"PMLA enacted in:",
+options:["1999","2005","2002","1992"]},
+{question:"Suspicious transactions reported to:",
+options:["FIU-IND","RBI","NSE","Finance Ministry"]},
+{question:"SCORES platform used for:",
+options:["Margin","IPO","Trading","Investor grievance"]},
+{question:"Investor Protection Fund used to:",
+options:["Dividend","Compensate investors","Fund IPO","Pay brokerage"]},
+{question:"Books preserved minimum:",
+options:["2 years","3 years","5 years","10 years"]}
+],
+
+/* SET 2 (51–100) */
+2: [
+{question:"Short margin penalty imposed by:",options:["Client","RBI","SEBI","Clearing Corporation"]},
+{question:"Risk containment measures aim to:",options:["Increase speculation","Reduce settlement risk","Increase brokerage","Delay settlement"]},
+{question:"Limit order means:",options:["Market price","Specified price","No price","After hours"]},
+{question:"Market order executed at:",options:["Specified","Closing price","Best available","Face value"]},
+{question:"Algorithmic trading refers to:",options:["Manual","Pre-programmed","IPO bidding","Physical"]},
+{question:"Default waterfall refers to:",options:["Dividend","Auction","Sequence of resources","IPO allocation"]},
+{question:"Segregation ensures:",options:["Profit","Transparency","Avoid audit","Reduce margin"]},
+{question:"Internal audit conducted:",options:["Never","Periodically","10 years","After complaint"]},
+{question:"Compliance officer responsible for:",options:["Trading","Risk","Compliance","Margin funding"]},
+{question:"Market wide position limit applies to:",options:["Cash","F&O","IPO","Mutual funds"]},
+{question:"RRM activated when:",options:["Margin shortfall","Profit","Volume","IPO closes"]},
+{question:"Transmission occurs in:",options:["Sale","Death","Pledge","Bonus"]},
+{question:"Nomination helps in:",options:["Transmission","Trading","Margin","Auction"]},
+{question:"Clearing member responsible for:",options:["Regulation","Clearing settlement","IPO","KYC"]},
+{question:"Custodian acts for:",options:["Retail","HNIs","Institutional investors","Brokers"]},
+{question:"Haircut means:",options:["Increase","Discount","Bonus","Refund"]},
+{question:"Liquid assets include:",options:["FD only","Land","Cash & bank","Machinery"]},
+{question:"Early pay-in results in:",options:["Margin benefit","Penalty","Auction","Buyback"]},
+{question:"Peak margin based on:",options:["Closing","Highest intraday","Weekly","Monthly"]},
+{question:"Dematerialization converts:",options:["Electronic to physical","Futures to equity","Physical to electronic","Bonus to rights"]},
+{question:"Rematerialization converts:",options:["Electronic to physical","Physical to electronic","Futures","IPO"]},
+{question:"Bulk deal exceeds:",options:["0.5%","1%","5%","10%"]},
+{question:"Block deal window:",options:["Entire day","Pre-open","Specific window","Post-market"]},
+{question:"Auction penalty when:",options:["Short delivery","Dividend unpaid","IPO fail","Margin excess"]},
+{question:"Settlement number identifies:",options:["Client","Settlement cycle","Broker","Margin"]},
+{question:"Trade confirmation via:",options:["Phone","Verbal","Contract note","Newspaper"]},
+{question:"Re-pledge allowed for:",options:["Loan","Margin funding","IPO","Dividend"]},
+{question:"Settlement holiday means:",options:["Trading closed","Settlement postponed","IPO cancel","Margin waived"]},
+{question:"Freeze instruction prevents:",options:["Trading","Transfer","Dividend","IPO"]},
+{question:"Collateral accepted includes:",options:["Shares","Cash","Bank guarantee","All"]},
+{question:"Margin trading facility:",options:["IPO","Borrowed funds trading","Physical","Auction"]},
+{question:"Proprietary trading:",options:["Client","Broker own","IPO","Institution"]},
+{question:"Trade-to-trade requires:",options:["Delivery","Intraday","Margin exemption","No settlement"]},
+{question:"KYC documents include:",options:["PAN","Address proof","Photo","All"]},
+{question:"Client ledger reflects:",options:["Price","Margin","Funds balance","ISIN"]},
+{question:"Surveillance mechanism aims:",options:["Speculation","Detect manipulation","Increase volatility","Reduce liquidity"]},
+{question:"Exposure limit imposed to:",options:["Increase risk","Reduce systemic risk","Increase turnover","Delay trades"]},
+{question:"Risk management includes:",options:["Margin","Position limits","Settlement guarantee","All"]},
+{question:"Objective of SORM:",options:["Max brokerage","Smooth settlement","IPO increase","Reduce volume"]},
+{question:"Inter-settlement adjustment:",options:["Adjust funds","Dividend","Change ISIN","Transfer demat"]},
+{question:"Client master report contains:",options:["Trade history","Demat details","Dividend","Auction"]},
+{question:"Payout occurs on:",options:["Settlement day","Trade day","Record date","Ex-date"]},
+{question:"Corporate action processed on:",options:["Ex-date","Trade date","Margin date","Auction date"]},
+{question:"ISIN full form:",options:["International Securities Identification Number","Indian Securities","Investment Serial","Internal Security"]},
+{question:"VaR covers:",options:["Normal loss","Extreme","Daily loss","Brokerage"]},
+{question:"Initial margin equals:",options:["VaR","Exposure","VaR+Exposure","MTM"]},
+{question:"MTM covers:",options:["Potential loss","Extreme loss","Actual daily loss","Broker default"]},
+{question:"Novation means:",options:["Cancel trade","Clearing becomes counterparty","Auction","Delivery delay"]},
+{question:"SGF used for:",options:["Dividend","Broker default","IPO","Margin refund"]},
+{question:"Encumbered securities are:",options:["Free","Pledged","Unrestricted","Bonus"]}
+],
+
+/* SET 3 (Given 1–50 scenario based) */
+3: [
+{question:"Client fails delivery on pay-in, exchange initiates:",options:["Buyback","Auction","Rights issue","Pledge"]},
+{question:"Peak margin calculated on:",options:["EOD","Highest intraday","Weekly","Monthly"]},
+{question:"Early pay-in provides:",options:["Dividend","Margin benefit","Brokerage","Postpone"]},
+{question:"MTM loss collected:",options:["Weekly","Monthly","Daily","Quarterly"]},
+{question:"Margin short penalty by:",options:["Broker","SEBI","RBI","Clearing Corporation"]},
+{question:"T+1 pay-in occurs:",options:["Trade day","Next day","After 2 days","After 3 days"]},
+{question:"Client securities kept in:",options:["Broker demat","Separate client account","Pool permanent","Proprietary"]},
+{question:"Trade-to-trade requires:",options:["Intraday","Delivery","No margin","Auction exempt"]},
+{question:"Exposure margin covers:",options:["Operational","Extreme move","Brokerage","Dividend"]},
+{question:"Auction conducted on:",options:["T","T+1","T+2","T+3"]},
+{question:"Clearing corporation guarantees:",options:["Profit","Dividend","Settlement","Brokerage"]},
+{question:"Inter-settlement adjustment used for:",options:["Margin","Adjust funds","Dividend","Code modify"]},
+{question:"RRM triggered when:",options:["Shortfall","Profit","IPO","Volume"]},
+{question:"Client ledger shows:",options:["Securities","Funds","Margin","Brokerage"]},
+{question:"Settlement number identifies:",options:["Client","Cycle","Broker","Exchange"]},
+{question:"Collateral haircut means:",options:["Increase","Reduction","Bonus","Refund"]},
+{question:"MTF allows:",options:["IPO","Borrowed trading","Auction","Insider"]},
+{question:"Free balance means:",options:["Locked","Frozen","Unpledged","Auctioned"]},
+{question:"Remat converts:",options:["Physical to electronic","Electronic to physical","Futures","Bonds"]},
+{question:"Demat requires:",options:["DIS","DRF","IPO form","Contract note"]},
+{question:"Ex-date:",options:["Record date","Before record","Buyer not entitled","Dividend date"]},
+{question:"Record date determines:",options:["Brokerage","Eligible holders","Auction","Margin"]},
+{question:"Bonus issue increases:",options:["Market cap","Shares","Face value","Dividend"]},
+{question:"Stock split:",options:["Increase FV","Decrease FV","Reduce shares","Buyback"]},
+{question:"Transmission in case of:",options:["Sale","Death","Pledge","Gift"]},
+{question:"Nomination helps:",options:["Transmission","Margin","IPO","Auction"]},
+{question:"Pledge repledge for:",options:["Margin","Dividend","IPO","Transmission"]},
+{question:"Freeze prevents:",options:["Dividend","Transfer","Trading hours","Margin"]},
+{question:"ISIN identifies:",options:["Investor","Broker","Security","Member"]},
+{question:"DP acts for:",options:["SEBI","Depository","RBI","Exchange"]},
+{question:"Off market means:",options:["NSE","BSE","Outside exchange","Auction"]},
+{question:"Bulk deal exceeds:",options:["0.5%","1%","5%","10%"]},
+{question:"Block window:",options:["Entire day","Specific window","After market","Pre open"]},
+{question:"Buyback reduces:",options:["Capital","FV","Dividend","Margin"]},
+{question:"Rights issue to:",options:["New investors","Promoters","Existing shareholders","Brokers"]},
+{question:"Default waterfall uses:",options:["SGF","Dividend","IPO","Brokerage"]},
+{question:"Early pay-in helps:",options:["Reduce margin","Increase brokerage","Delay","Avoid KYC"]},
+{question:"Pay-out on:",options:["Trade day","Settlement","Record","Ex"]},
+{question:"Client code modification:",options:["Not allowed","Allowed valid reason","Anytime","Mandatory"]},
+{question:"STP stands:",options:["Securities","Straight Through Processing","Standard","Settlement"]}
+],
+
+/* SET 4 (40 NEW QUESTIONS ADDED) */
+4: [
+{question:"SEBI Act enacted in:",options:["1988","1990","1992","1995"]},
+{question:"PMLA enacted in:",options:["2000","2002","2005","1992"]},
+{question:"Insider trading relates to:",options:["Public info","UPSI","Dividend","IPO"]},
+{question:"SCORES platform is for:",options:["Trading","Settlement","Complaints","Margin"]},
+{question:"Operational risk example:",options:["Price move","Default","System failure","Interest"]},
+{question:"Credit risk example:",options:["Volatility","Broker default","Inflation","Dividend cut"]},
+{question:"Market risk due to:",options:["Price move","Audit","Compliance","KYC"]},
+{question:"Books maintained for:",options:["3 years","5 years","2 years","10 years"]},
+{question:"Compliance officer ensures:",options:["Profit","Compliance","Margin","IPO"]},
+{question:"Internal audit conducted:",options:["Periodically","Never","After complaint","10 yrs"]},
+
+{question:"Margin shortfall leads to:",options:["Reward","Penalty","Bonus","Dividend"]},
+{question:"Settlement guarantee fund protects:",options:["Crash","Broker default","Dividend","IPO delay"]},
+{question:"Limit order executed at:",options:["Any price","Specified price","Closing","Face value"]},
+{question:"Market order executed at:",options:["Specified","Best available","Previous","Face value"]},
+{question:"Algo trading uses:",options:["Manual","Pre-programmed","Physical","IPO"]},
+{question:"Custodian mainly for:",options:["Retail","Institutional","Broker","Promoter"]},
+{question:"Novation means:",options:["Cancel trade","CC becomes counterparty","Auction","Delay"]},
+{question:"VaR margin protects:",options:["Normal volatility","Extreme crash","Daily loss","Brokerage"]},
+{question:"Exposure margin protects:",options:["Normal move","Extreme volatility","Dividend","Audit"]},
+{question:"Initial margin equals:",options:["VaR","Exposure","VaR+Exposure","MTM"]},
+
+{question:"MTM adjusted:",options:["Weekly","Monthly","Daily","Yearly"]},
+{question:"Encumbered securities are:",options:["Free","Pledged","Bonus","Frozen"]},
+{question:"Unencumbered securities are:",options:["Locked","Pledged","Free","Frozen"]},
+{question:"Peak margin based on:",options:["Closing","Highest intraday","Weekly","Monthly"]},
+{question:"Client funds segregation ensures:",options:["Profit","Transparency","Tax benefit","Delay"]},
+{question:"Circuit filter prevents:",options:["Profit","Volatility","IPO","Audit"]},
+{question:"Trade confirmation via:",options:["Phone","Contract note","SMS only","Newspaper"]},
+{question:"Settlement holiday means:",options:["No trade","Settlement postponed","IPO cancel","Margin waive"]},
+{question:"DP full form:",options:["Depository Participant","Delivery Person","Deposit Provider","Debt Partner"]},
+{question:"Clearing member role:",options:["Regulation","Settlement obligations","IPO","Audit"]},
+
+{question:"SGF stands for:",options:["Settlement Guarantee Fund","Securities Growth Fund","Share Gain Fund","Settlement Growth Facility"]},
+{question:"Record date used for:",options:["Brokerage","Eligible holders","Margin","Auction"]},
+{question:"Ex-date buyer gets benefit?",options:["Yes","No","Sometimes","After payment"]},
+{question:"Transmission requires:",options:["Death certificate","DIS","IPO form","Contract note"]},
+{question:"Pledge used for:",options:["Dividend","Collateral","Transfer","IPO"]},
+{question:"Freeze instruction stops:",options:["Transfer","Dividend","Interest","IPO"]},
+{question:"Market wide position limit in:",options:["Cash","F&O","IPO","Debt"]},
+{question:"RRM activated when:",options:["Profit","Shortfall","Volume","IPO"]},
+{question:"Primary market deals in:",options:["Old shares","New issue","Derivatives","Commodities"]},
+{question:"Secondary market deals in:",options:["IPO","Existing securities","Insurance","Loans"]}
+]
+
+};
+
+/* ANSWERS */
+const answers = {
+1:["B","C","C","A","C","C","D","C","C","B","A","A","C","C","B","B","B","C","A","D","B","C","A","B","C","D","B","A","C","A","D","C","B","C","C","D","B","A","C","D","B","C","A","D","B","C","A","D","B","C"],
+2:["D","B","B","C","B","C","B","B","C","B","A","B","A","B","C","B","C","A","B","C","A","A","C","A","B","C","B","B","B","D","B","A","D","C","B","B","D","B","A","B","A","B","A","B","C","C","B","B","C","B"],
+3:["B","B","B","C","D","B","B","B","B","C","C","B","A","B","B","B","B","C","B","B","C","B","B","B","B","A","A","B","C","B","C","A","B","A","C","A","B","B","B","B"],
+4:["C","B","B","C","C","B","A","B","B","A","B","B","B","B","B","B","B","A","B","C","C","B","C","B","B","B","B","B","A","B","A","B","B","A","B","A","B","B","B","B"]
+};
+
+</script>
+</body>
+</html>
