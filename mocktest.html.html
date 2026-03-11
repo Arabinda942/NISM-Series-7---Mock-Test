@@ -8,95 +8,93 @@
 
 <style>
 body{
-font-family:Arial;
-font-family:'Poppins', Arial;
-background:#f4f6f9;
-margin:0;
-padding:0;
+  font-family:'Poppins', Arial;
+  background:#f4f6f9;
+  margin:0;
+  padding:0;
 }
 
 .header{
-background:#2e86de;
-background: linear-gradient(90deg,#2e86de,#1abc9c);
-color:white;
-padding:15px;
-text-align:center;
-font-size:22px;
-letter-spacing:1px;
+  background: linear-gradient(90deg,#2e86de,#1abc9c);
+  color:white;
+  padding:15px;
+  text-align:center;
+  font-size:22px;
+  letter-spacing:1px;
 }
 
 .container{
-padding:20px;
+  padding:20px;
 }
 
 .set-buttons button{
-padding:15px 30px;
-margin:10px;
-font-size:18px;
-cursor:pointer;
-background:#27ae60;
-color:white;
-border:none;
-border-radius:6px;
-transition:0.2s;
+  padding:15px 30px;
+  margin:10px;
+  font-size:18px;
+  cursor:pointer;
+  background:#27ae60;
+  color:white;
+  border:none;
+  border-radius:6px;
+  transition:0.2s;
 }
 
 .set-buttons button:hover{
-background:#1e8449;
-transform:translateY(-2px);
+  background:#1e8449;
+  transform:translateY(-2px);
 }
 
 .timer{
-font-size:20px;
-font-weight:bold;
-color:red;
-text-align:right;
+  font-size:20px;
+  font-weight:bold;
+  color:red;
+  text-align:right;
 }
 
 .question{
-margin-bottom:15px;
-padding:15px;
-background:white;
-border-radius:6px;
-box-shadow:0 4px 10px rgba(0,0,0,0.08);
-transition:0.2s;
+  margin-bottom:15px;
+  padding:15px;
+  background:white;
+  border-radius:6px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  transition:0.2s;
 }
 
 .question:hover{
-transform:scale(1.01);
+  transform:scale(1.01);
 }
 
 .options label{
-display:block;
-margin-left:15px;
-padding:8px;
-border-radius:5px;
-cursor:pointer;
-transition:0.2s;
+  display:block;
+  margin-left:15px;
+  padding:8px;
+  border-radius:5px;
+  cursor:pointer;
+  transition:0.2s;
 }
 
 .options label:hover{
-background:#eef5ff;
+  background:#eef5ff;
 }
 
 .submit-btn{
-padding:10px 25px;
-background:#2e86de;
-color:white;
-border:none;
-border-radius:5px;
-font-size:16px;
-cursor:pointer;
+  padding:10px 25px;
+  background:#2e86de;
+  color:white;
+  border:none;
+  border-radius:5px;
+  font-size:16px;
+  cursor:pointer;
 }
 
 .submit-btn:hover{
-background:#1b6fd1;
+  background:#1b6fd1;
 }
 
 #result{
-font-size:20px;
-font-weight:bold;
-margin-top:20px;
+  font-size:20px;
+  font-weight:bold;
+  margin-top:20px;
 }
 </style>
 </head>
@@ -104,187 +102,143 @@ margin-top:20px;
 <body>
 
 <div class="header">
-NISM Series 7 – Mock Test
+  NISM Series 7 – Mock Test
 </div>
 
 <div class="container" id="home">
-<div style="margin-bottom:20px;text-align:center;">
-<input 
-id="studentName"
-type="text"
-placeholder="Enter Your Name To Start Exam"
-style="padding:12px;width:260px;font-size:16px;border-radius:6px;border:1px solid #ccc;"
->
-</div>
+  <div style="margin-bottom:20px;text-align:center;">
+    <input 
+      id="studentName"
+      type="text"
+      placeholder="Enter Your Name To Start Exam"
+      style="padding:12px;width:260px;font-size:16px;border-radius:6px;border:1px solid #ccc;"
+    >
+  </div>
 
-<div class="set-buttons">
-<button onclick="startTest(1)">Set 1</button>
-<button onclick="startTest(2)">Set 2</button>
-<button onclick="startTest(3)">Set 3</button>
-<button onclick="startTest(4)">Set 4</button>
-</div>
-
+  <div class="set-buttons">
+    <button onclick="startTest(1)">Set 1</button>
+    <button onclick="startTest(2)">Set 2</button>
+    <button onclick="startTest(3)">Set 3</button>
+    <button onclick="startTest(4)">Set 4</button>
+  </div>
 </div>
 
 <div class="container" id="exam" style="display:none;">
+  <div class="timer" id="timer"></div>
 
-<div class="timer" id="timer"></div>
+  <div style="width:100%;background:#ddd;border-radius:6px;margin-bottom:15px;">
+    <div id="progressBar" style="height:10px;width:0%;background:#27ae60;border-radius:6px;"></div>
+  </div>
 
-<div style="width:100%;background:#ddd;border-radius:6px;margin-bottom:15px;">
-<div id="progressBar" style="height:10px;width:0%;background:#27ae60;border-radius:6px;"></div>
-</div>
+  <div id="stats" style="margin-bottom:15px;font-weight:bold;">Answered: 0 / 0</div>
 
-<div id="stats" style="margin-bottom:15px;font-weight:bold;"></div>
+  <form id="testForm"></form>
 
-<form id="testForm"></form>
+  <button class="submit-btn" onclick="submitTest()">Submit Test</button>
 
-<button class="submit-btn" onclick="submitTest()">Submit Test</button>
-
-<div id="result"></div>
-
+  <div id="result"></div>
 </div>
 
 <script>
-
 let timerInterval;
 let timeLeft = 60*60;
 let currentSet = 1;
 
 function startTest(set){
+  let name = document.getElementById("studentName").value.trim();
+  if(name===""){
+    alert("Please enter your name before starting the exam");
+    return;
+  }
 
-let name = document.getElementById("studentName").value.trim();
+  currentSet = set;
+  document.getElementById("home").style.display="none";
+  document.getElementById("exam").style.display="block";
 
-if(name===""){
-alert("Please enter your name before starting the exam");
-return;
-}
-
-currentSet = set;
-
-document.getElementById("home").style.display="none";
-document.getElementById("exam").style.display="block";
-
-loadQuestions(set);
-
-startTimer();
-
+  loadQuestions(set);
+  updateProgress(); // Initialize progress bar
+  startTimer();
 }
 
 function startTimer(){
+  timeLeft = 60*60;
 
-timeLeft = 60*60;
+  timerInterval = setInterval(function(){
+    let m = Math.floor(timeLeft/60);
+    let s = timeLeft%60;
+    document.getElementById("timer").innerHTML = "Time Left: "+m+":"+(s<10?"0":"")+s;
+    timeLeft--;
 
-timerInterval = setInterval(function(){
-
-let m = Math.floor(timeLeft/60);
-let s = timeLeft%60;
-
-document.getElementById("timer").innerHTML =
-"Time Left: "+m+":"+(s<10?"0":"")+s;
-
-timeLeft--;
-
-if(timeLeft<0){
-clearInterval(timerInterval);
-submitTest();
-}
-
-},1000);
+    if(timeLeft<0){
+      clearInterval(timerInterval);
+      submitTest();
+    }
+  },1000);
 }
 
 function updateProgress(){
-
-let total = questionBank[currentSet].length;
-
-let answered =
-document.querySelectorAll('input[type="radio"]:checked').length;
-
-let percent = (answered/total)*100;
-
-document.getElementById("progressBar").style.width = percent+"%";
-
-document.getElementById("stats").innerHTML =
-"Answered: "+answered+" / "+total;
-
+  let total = questionBank[currentSet].length;
+  let answered = document.querySelectorAll('input[type="radio"]:checked').length;
+  let percent = (answered/total)*100;
+  document.getElementById("progressBar").style.width = percent+"%";
+  document.getElementById("stats").innerHTML = "Answered: "+answered+" / "+total;
 }
 
 function loadQuestions(set){
+  let form = document.getElementById("testForm");
+  form.innerHTML="";
+  let qs = questionBank[set];
 
-let form = document.getElementById("testForm");
-form.innerHTML="";
+  for(let i=0;i<qs.length;i++){
+    let qDiv = document.createElement("div");
+    qDiv.className="question";
 
-let qs = questionBank[set];
+    qDiv.innerHTML="<p>"+(i+1)+". "+qs[i].question+"</p>";
 
-for(let i=0;i<qs.length;i++){
+    qs[i].options.forEach((opt,index)=>{
+      let letter = ["A","B","C","D"][index];
+      qDiv.innerHTML+=
+      `<label class="options">
+        <input type="radio" name="q${i}" value="${letter}" onclick="updateProgress()">
+        ${letter}. ${opt}
+      </label>`;
+    });
 
-let qDiv = document.createElement("div");
-qDiv.className="question";
-
-qDiv.innerHTML="<p>"+(i+1)+". "+qs[i].question+"</p>";
-
-qs[i].options.forEach((opt,index)=>{
-
-let letter = ["A","B","C","D"][index];
-
-qDiv.innerHTML+=
-`<label>
-<input type="radio" name="q${i}" value="${letter}" onclick="updateProgress()">
-${letter}. ${opt}
-</label>`;
-
-});
-
-form.appendChild(qDiv);
-
-}
-
+    form.appendChild(qDiv);
+  }
 }
 
 function submitTest(){
+  clearInterval(timerInterval);
 
-clearInterval(timerInterval);
+  let score = 0;
+  let total = answers[currentSet].length;
 
-let score = 0;
+  for(let i=0;i<total;i++){
+    let correct = answers[currentSet][i];
+    let selected = document.querySelector('input[name="q'+i+'"]:checked');
+    let options = document.querySelectorAll('input[name="q'+i+'"]');
 
-let total = answers[currentSet].length;
+    options.forEach(opt=>{
+      let label = opt.parentElement;
+      if(opt.value === correct){
+        label.style.color="green";
+        label.style.fontWeight="bold";
+      }
+      if(selected && opt.value === selected.value && selected.value!==correct){
+        label.style.color="red";
+        label.style.fontWeight="bold";
+      }
+    });
 
-for(let i=0;i<total;i++){
+    if(selected && selected.value===correct){
+      score++;
+    }
+  }
 
-let correct = answers[currentSet][i];
-
-let selected =
-document.querySelector('input[name="q'+i+'"]:checked');
-
-let options =
-document.querySelectorAll('input[name="q'+i+'"]');
-
-options.forEach(opt=>{
-
-let label = opt.parentElement;
-
-if(opt.value === correct){
-label.style.color="green";
-label.style.fontWeight="bold";
-}
-
-if(selected && opt.value === selected.value && selected.value!==correct){
-label.style.color="red";
-label.style.fontWeight="bold";
-}
-
-});
-
-if(selected && selected.value===correct){
-score++;
-}
-
-}
-
-let name = document.getElementById("studentName").value;
-
-document.getElementById("result").innerHTML =
-"Candidate: "+name+"<br>Your Score: "+score+" / "+total;
-
+  let name = document.getElementById("studentName").value;
+  document.getElementById("result").innerHTML =
+    "Candidate: "+name+"<br>Your Score: "+score+" / "+total;
 }
 
 /* ========================= */
@@ -525,5 +479,6 @@ NISM Series 7 Mock Test Portal
 </footer>
 </body>
 </html>
+
 
 
