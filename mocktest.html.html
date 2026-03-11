@@ -2,67 +2,72 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>NISM Series 7 - 4 Mock Tests</title>
+<title>NISM Series 7 Mock Test</title>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f9;
-    margin:0;
-    padding:0;
+font-family:Arial;
+background:#f4f6f9;
+margin:0;
+padding:0;
 }
+
 .header{
-    background:#2e86de;
-    color:white;
-    padding:15px;
-    text-align:center;
-    font-size:22px;
+background:#2e86de;
+color:white;
+padding:15px;
+text-align:center;
+font-size:22px;
 }
+
 .container{
-    padding:20px;
+padding:20px;
 }
+
 .set-buttons button{
-    padding:15px 30px;
-    margin:10px;
-    font-size:18px;
-    cursor:pointer;
-    background:#27ae60;
-    color:white;
-    border:none;
-    border-radius:6px;
+padding:15px 30px;
+margin:10px;
+font-size:18px;
+cursor:pointer;
+background:#27ae60;
+color:white;
+border:none;
+border-radius:6px;
 }
-.set-buttons button:hover{
-    background:#1e8449;
-}
+
 .timer{
-    font-size:20px;
-    font-weight:bold;
-    color:red;
-    text-align:right;
+font-size:20px;
+font-weight:bold;
+color:red;
+text-align:right;
 }
+
 .question{
-    margin-bottom:15px;
-    padding:10px;
-    background:white;
-    border-radius:6px;
+margin-bottom:15px;
+padding:10px;
+background:white;
+border-radius:6px;
 }
+
 .options label{
-    display:block;
-    margin-left:15px;
+display:block;
+margin-left:15px;
 }
-button.submit-btn{
-    padding:10px 25px;
-    background:#2e86de;
-    color:white;
-    border:none;
-    border-radius:5px;
-    font-size:16px;
-    cursor:pointer;
+
+.submit-btn{
+padding:10px 25px;
+background:#2e86de;
+color:white;
+border:none;
+border-radius:5px;
+font-size:16px;
+cursor:pointer;
 }
+
 #result{
-    font-size:20px;
-    font-weight:bold;
-    margin-top:20px;
+font-size:20px;
+font-weight:bold;
+margin-top:20px;
 }
 </style>
 </head>
@@ -70,90 +75,149 @@ button.submit-btn{
 <body>
 
 <div class="header">
-NISM Series 7 – 4 Full Mock Tests (60 Minutes Each)
+NISM Series 7 – Mock Test
 </div>
 
 <div class="container" id="home">
+
 <div class="set-buttons">
 <button onclick="startTest(1)">Set 1</button>
 <button onclick="startTest(2)">Set 2</button>
 <button onclick="startTest(3)">Set 3</button>
 <button onclick="startTest(4)">Set 4</button>
 </div>
+
 </div>
 
 <div class="container" id="exam" style="display:none;">
+
 <div class="timer" id="timer"></div>
+
 <form id="testForm"></form>
+
 <button class="submit-btn" onclick="submitTest()">Submit Test</button>
+
 <div id="result"></div>
+
 </div>
 
 <script>
 
 let timerInterval;
-let timeLeft = 60*60; // 60 minutes
+let timeLeft = 60*60;
 let currentSet = 1;
 
 function startTest(set){
-    currentSet = set;
-    document.getElementById("home").style.display="none";
-    document.getElementById("exam").style.display="block";
-    loadQuestions(set);
-    startTimer();
+
+currentSet = set;
+
+document.getElementById("home").style.display="none";
+document.getElementById("exam").style.display="block";
+
+loadQuestions(set);
+
+startTimer();
 }
 
 function startTimer(){
-    timeLeft = 60*60;
-    timerInterval = setInterval(function(){
-        let m = Math.floor(timeLeft/60);
-        let s = timeLeft%60;
-        document.getElementById("timer").innerHTML =
-        "Time Left: "+m+":"+(s<10?"0":"")+s;
-        timeLeft--;
-        if(timeLeft<0){
-            clearInterval(timerInterval);
-            alert("Time Over! Submitting...");
-            submitTest();
-        }
-    },1000);
+
+timeLeft = 60*60;
+
+timerInterval = setInterval(function(){
+
+let m = Math.floor(timeLeft/60);
+let s = timeLeft%60;
+
+document.getElementById("timer").innerHTML =
+"Time Left: "+m+":"+(s<10?"0":"")+s;
+
+timeLeft--;
+
+if(timeLeft<0){
+clearInterval(timerInterval);
+submitTest();
 }
 
-function submitTest(){
-    clearInterval(timerInterval);
-    let score = 0;
-    let total = answers[currentSet].length;
-
-    for(let i=0;i<total;i++){
-        let q = document.querySelector('input[name="q'+i+'"]:checked');
-        if(q && q.value === answers[currentSet][i]){
-            score++;
-        }
-    }
-
-    document.getElementById("result").innerHTML =
-    "Your Score: "+score+" / "+total;
+},1000);
 }
 
 function loadQuestions(set){
-    let form = document.getElementById("testForm");
-    form.innerHTML="";
-    let qs = questionBank[set];
 
-    for(let i=0;i<qs.length;i++){
-        let qDiv = document.createElement("div");
-        qDiv.className="question";
-        qDiv.innerHTML="<p>"+(i+1)+". "+qs[i].question+"</p>";
+let form = document.getElementById("testForm");
+form.innerHTML="";
 
-        qs[i].options.forEach((opt,index)=>{
-            let letter = ["A","B","C","D"][index];
-            qDiv.innerHTML +=
-            `<label><input type="radio" name="q${i}" value="${letter}"> ${letter}. ${opt}</label>`;
-        });
+let qs = questionBank[set];
 
-        form.appendChild(qDiv);
-    }
+for(let i=0;i<qs.length;i++){
+
+let qDiv = document.createElement("div");
+qDiv.className="question";
+
+qDiv.innerHTML="<p>"+(i+1)+". "+qs[i].question+"</p>";
+
+qs[i].options.forEach((opt,index)=>{
+
+let letter = ["A","B","C","D"][index];
+
+qDiv.innerHTML+=
+`<label>
+<input type="radio" name="q${i}" value="${letter}">
+${letter}. ${opt}
+</label>`;
+
+});
+
+form.appendChild(qDiv);
+
 }
+
+}
+
+function submitTest(){
+
+clearInterval(timerInterval);
+
+let score = 0;
+
+let total = answers[currentSet].length;
+
+for(let i=0;i<total;i++){
+
+let correct = answers[currentSet][i];
+
+let selected =
+document.querySelector('input[name="q'+i+'"]:checked');
+
+let options =
+document.querySelectorAll('input[name="q'+i+'"]');
+
+options.forEach(opt=>{
+
+let label = opt.parentElement;
+
+if(opt.value === correct){
+label.style.color="green";
+label.style.fontWeight="bold";
+}
+
+if(selected && opt.value === selected.value && selected.value!==correct){
+label.style.color="red";
+label.style.fontWeight="bold";
+}
+
+});
+
+if(selected && selected.value===correct){
+score++;
+}
+
+}
+
+document.getElementById("result").innerHTML =
+"Your Score: "+score+" / "+total;
+
+}
+
 
 /* ========================= */
 /* QUESTION BANK */
@@ -319,7 +383,7 @@ options:["2 years","3 years","5 years","10 years"]}
 {question:"Encumbered securities are:",options:["Free","Pledged","Unrestricted","Bonus"]}
 ],
 
-/* SET 3 (Given 1–50 scenario based) */
+/* SET 3 */
 3: [
 {question:"Client fails delivery on pay-in, exchange initiates:",options:["Buyback","Auction","Rights issue","Pledge"]},
 {question:"Peak margin calculated on:",options:["EOD","Highest intraday","Weekly","Monthly"]},
@@ -363,7 +427,7 @@ options:["2 years","3 years","5 years","10 years"]}
 {question:"STP stands:",options:["Securities","Straight Through Processing","Standard","Settlement"]}
 ],
 
-/* SET 4 (40 NEW QUESTIONS ADDED) */
+/* SET 4 */
 4: [
 {question:"SEBI Act enacted in:",options:["1988","1990","1992","1995"]},
 {question:"PMLA enacted in:",options:["2000","2002","2005","1992"]},
@@ -374,40 +438,7 @@ options:["2 years","3 years","5 years","10 years"]}
 {question:"Market risk due to:",options:["Price move","Audit","Compliance","KYC"]},
 {question:"Books maintained for:",options:["3 years","5 years","2 years","10 years"]},
 {question:"Compliance officer ensures:",options:["Profit","Compliance","Margin","IPO"]},
-{question:"Internal audit conducted:",options:["Periodically","Never","After complaint","10 yrs"]},
-
-{question:"Margin shortfall leads to:",options:["Reward","Penalty","Bonus","Dividend"]},
-{question:"Settlement guarantee fund protects:",options:["Crash","Broker default","Dividend","IPO delay"]},
-{question:"Limit order executed at:",options:["Any price","Specified price","Closing","Face value"]},
-{question:"Market order executed at:",options:["Specified","Best available","Previous","Face value"]},
-{question:"Algo trading uses:",options:["Manual","Pre-programmed","Physical","IPO"]},
-{question:"Custodian mainly for:",options:["Retail","Institutional","Broker","Promoter"]},
-{question:"Novation means:",options:["Cancel trade","CC becomes counterparty","Auction","Delay"]},
-{question:"VaR margin protects:",options:["Normal volatility","Extreme crash","Daily loss","Brokerage"]},
-{question:"Exposure margin protects:",options:["Normal move","Extreme volatility","Dividend","Audit"]},
-{question:"Initial margin equals:",options:["VaR","Exposure","VaR+Exposure","MTM"]},
-
-{question:"MTM adjusted:",options:["Weekly","Monthly","Daily","Yearly"]},
-{question:"Encumbered securities are:",options:["Free","Pledged","Bonus","Frozen"]},
-{question:"Unencumbered securities are:",options:["Locked","Pledged","Free","Frozen"]},
-{question:"Peak margin based on:",options:["Closing","Highest intraday","Weekly","Monthly"]},
-{question:"Client funds segregation ensures:",options:["Profit","Transparency","Tax benefit","Delay"]},
-{question:"Circuit filter prevents:",options:["Profit","Volatility","IPO","Audit"]},
-{question:"Trade confirmation via:",options:["Phone","Contract note","SMS only","Newspaper"]},
-{question:"Settlement holiday means:",options:["No trade","Settlement postponed","IPO cancel","Margin waive"]},
-{question:"DP full form:",options:["Depository Participant","Delivery Person","Deposit Provider","Debt Partner"]},
-{question:"Clearing member role:",options:["Regulation","Settlement obligations","IPO","Audit"]},
-
-{question:"SGF stands for:",options:["Settlement Guarantee Fund","Securities Growth Fund","Share Gain Fund","Settlement Growth Facility"]},
-{question:"Record date used for:",options:["Brokerage","Eligible holders","Margin","Auction"]},
-{question:"Ex-date buyer gets benefit?",options:["Yes","No","Sometimes","After payment"]},
-{question:"Transmission requires:",options:["Death certificate","DIS","IPO form","Contract note"]},
-{question:"Pledge used for:",options:["Dividend","Collateral","Transfer","IPO"]},
-{question:"Freeze instruction stops:",options:["Transfer","Dividend","Interest","IPO"]},
-{question:"Market wide position limit in:",options:["Cash","F&O","IPO","Debt"]},
-{question:"RRM activated when:",options:["Profit","Shortfall","Volume","IPO"]},
-{question:"Primary market deals in:",options:["Old shares","New issue","Derivatives","Commodities"]},
-{question:"Secondary market deals in:",options:["IPO","Existing securities","Insurance","Loans"]}
+{question:"Internal audit conducted:",options:["Periodically","Never","After complaint","10 yrs"]}
 ]
 
 };
@@ -417,9 +448,10 @@ const answers = {
 1:["B","C","C","A","C","C","D","C","C","B","A","A","C","C","B","B","B","C","A","D","B","C","A","B","C","D","B","A","C","A","D","C","B","C","C","D","B","A","C","D","B","C","A","D","B","C","A","D","B","C"],
 2:["D","B","B","C","B","C","B","B","C","B","A","B","A","B","C","B","C","A","B","C","A","A","C","A","B","C","B","B","B","D","B","A","D","C","B","B","D","B","A","B","A","B","A","B","C","C","B","B","C","B"],
 3:["B","B","B","C","D","B","B","B","B","C","C","B","A","B","B","B","B","C","B","B","C","B","B","B","B","A","A","B","C","B","C","A","B","A","C","A","B","B","B","B"],
-4:["C","B","B","C","C","B","A","B","B","A","B","B","B","B","B","B","B","A","B","C","C","B","C","B","B","B","B","B","A","B","A","B","B","A","B","A","B","B","B","B"]
+4:["C","B","B","C","C","B","A","B","B","A"]
 };
 
 </script>
+
 </body>
 </html>
