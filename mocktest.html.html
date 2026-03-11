@@ -4,9 +4,12 @@
 <meta charset="UTF-8">
 <title>NISM Series 7 Mock Test</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
 body{
 font-family:Arial;
+font-family:'Poppins', Arial;
 background:#f4f6f9;
 margin:0;
 padding:0;
@@ -14,10 +17,12 @@ padding:0;
 
 .header{
 background:#2e86de;
+background: linear-gradient(90deg,#2e86de,#1abc9c);
 color:white;
 padding:15px;
 text-align:center;
 font-size:22px;
+letter-spacing:1px;
 }
 
 .container{
@@ -33,6 +38,12 @@ background:#27ae60;
 color:white;
 border:none;
 border-radius:6px;
+transition:0.2s;
+}
+
+.set-buttons button:hover{
+background:#1e8449;
+transform:translateY(-2px);
 }
 
 .timer{
@@ -44,14 +55,28 @@ text-align:right;
 
 .question{
 margin-bottom:15px;
-padding:10px;
+padding:15px;
 background:white;
 border-radius:6px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+transition:0.2s;
+}
+
+.question:hover{
+transform:scale(1.01);
 }
 
 .options label{
 display:block;
 margin-left:15px;
+padding:8px;
+border-radius:5px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.options label:hover{
+background:#eef5ff;
 }
 
 .submit-btn{
@@ -62,6 +87,10 @@ border:none;
 border-radius:5px;
 font-size:16px;
 cursor:pointer;
+}
+
+.submit-btn:hover{
+background:#1b6fd1;
 }
 
 #result{
@@ -92,6 +121,12 @@ NISM Series 7 – Mock Test
 <div class="container" id="exam" style="display:none;">
 
 <div class="timer" id="timer"></div>
+
+<div style="width:100%;background:#ddd;border-radius:6px;margin-bottom:15px;">
+<div id="progressBar" style="height:10px;width:0%;background:#27ae60;border-radius:6px;"></div>
+</div>
+
+<div id="stats" style="margin-bottom:15px;font-weight:bold;"></div>
 
 <form id="testForm"></form>
 
@@ -141,6 +176,22 @@ submitTest();
 },1000);
 }
 
+function updateProgress(){
+
+let total = questionBank[currentSet].length;
+
+let answered =
+document.querySelectorAll('input[type="radio"]:checked').length;
+
+let percent = (answered/total)*100;
+
+document.getElementById("progressBar").style.width = percent+"%";
+
+document.getElementById("stats").innerHTML =
+"Answered: "+answered+" / "+total;
+
+}
+
 function loadQuestions(set){
 
 let form = document.getElementById("testForm");
@@ -161,7 +212,7 @@ let letter = ["A","B","C","D"][index];
 
 qDiv.innerHTML+=
 `<label>
-<input type="radio" name="q${i}" value="${letter}">
+<input type="radio" name="q${i}" value="${letter}" onclick="updateProgress()">
 ${letter}. ${opt}
 </label>`;
 
@@ -217,7 +268,6 @@ document.getElementById("result").innerHTML =
 "Your Score: "+score+" / "+total;
 
 }
-
 
 /* ========================= */
 /* QUESTION BANK */
@@ -452,6 +502,9 @@ const answers = {
 };
 
 </script>
-
+<footer style="text-align:center;padding:20px;color:#888;font-size:14px;">
+NISM Series 7 Mock Test Portal
+</footer>
 </body>
 </html>
+
