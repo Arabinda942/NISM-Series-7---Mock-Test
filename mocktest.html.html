@@ -108,6 +108,14 @@ NISM Series 7 – Mock Test
 </div>
 
 <div class="container" id="home">
+<div style="margin-bottom:20px;text-align:center;">
+<input 
+id="studentName"
+type="text"
+placeholder="Enter Your Name To Start Exam"
+style="padding:12px;width:260px;font-size:16px;border-radius:6px;border:1px solid #ccc;"
+>
+</div>
 
 <div class="set-buttons">
 <button onclick="startTest(1)">Set 1</button>
@@ -144,6 +152,13 @@ let currentSet = 1;
 
 function startTest(set){
 
+let name = document.getElementById("studentName").value.trim();
+
+if(name===""){
+alert("Please enter your name before starting the exam");
+return;
+}
+
 currentSet = set;
 
 document.getElementById("home").style.display="none";
@@ -152,6 +167,7 @@ document.getElementById("exam").style.display="block";
 loadQuestions(set);
 
 startTimer();
+
 }
 
 function startTimer(){
@@ -264,8 +280,10 @@ score++;
 
 }
 
+let name = document.getElementById("studentName").value;
+
 document.getElementById("result").innerHTML =
-"Your Score: "+score+" / "+total;
+"Candidate: "+name+"<br>Your Score: "+score+" / "+total;
 
 }
 
@@ -507,4 +525,5 @@ NISM Series 7 Mock Test Portal
 </footer>
 </body>
 </html>
+
 
